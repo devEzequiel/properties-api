@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models\Api;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Property extends Model
+{
+    use HasFactory;
+    protected $table = 'properties';
+    protected $fillable = [
+        'owner_id',
+        'title',
+        'description',
+        'rental_price',
+        'sale_price',
+        'slug'
+    ];
+}
