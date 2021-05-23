@@ -20,22 +20,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 });
 
-Route::namespace('Api')->prefix('auth')->group(function () {
-    Route::post('/signup', [UserController::class, 'store'])
-        ->name('user.register');
+Route::namespace('Api')->name('user.')->prefix('auth')->group(function () {
+    Route::get('/{id}', [UserController::class, 'show'])
+        ->name('show');
+    Route::post('/', [UserController::class, 'store'])
+        ->name('register');
+    Route::put('/{id}', [UserController::class, 'update'])
+        ->name('update');
 })
 //->middleware('auth:sanctum')
 ;
 
-Route::namespace('Api')->prefix('properties')->group(function () {
+Route::namespace('Api')->name('property.')->prefix('properties')->group(function () {
     Route::get('/', [PropertyController::class, 'index'])
-        ->name('property.home');
+        ->name('list');
     Route::get('/{id}', [PropertyController::class, 'show'])
-        ->name('property.show');
+        ->name('show');
     Route::post('/save', [PropertyController::class, 'store'])
-        ->name('property.save');
+        ->name('create');
     Route::put('/{id}/edit', [PropertyController::class, 'update'])
-        ->name('property.update');
+        ->name('update');
     Route::delete('/delete/{id}', [PropertyController::class, 'destroy'])
-        ->name('property.delete');
+        ->name('delete');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Models\Api;
 
+use App\Models\Api\Auth\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,4 +18,9 @@ class Property extends Model
         'sale_price',
         'slug'
     ];
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

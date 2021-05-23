@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PropertyRequest;
 use App\Http\Resources\PropertyCollection;
 use App\Http\Resources\PropertyResource;
+use App\Models\Api\Auth\User;
 use App\Models\Api\Property;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -23,8 +24,13 @@ class PropertyController extends Controller
         $this->property = $property;
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     /**
-     * Display a listing of the resource.
+     * Display a collection.
      *
      * @return PropertyCollection
      */
@@ -40,9 +46,9 @@ class PropertyController extends Controller
      *
      * @return PropertyResource
      */
-    public function show(int $id)
+    public function show(int $id): PropertyResource
     {
-        $property = $this->property->find($id);
+        $property = $this->property->findOrFail($id);
 
         return new PropertyResource($property);
     }
@@ -76,10 +82,10 @@ class PropertyController extends Controller
     {
         $data = $request->all();
         $data['slug'] = $this->slugUpdate($data);
-        $property = $this->property->find($data['id']);
+        $property = $this->property->findOrFail($data['id']);
         $property->update($data);
 
-        return response()->json(['data' => new PropertyResource($property), 'message' => 'success']);
+        return response()->json(['data' => ['message' => 'Imóvel atualizado com sucesso']]);
     }
 
     /**
@@ -90,7 +96,7 @@ class PropertyController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $property = $this->property->find($id);
+        $property = $this->property->findOrFail($id);
         $property->delete();
 
         return response()->json(['msg' => 'Imóvel removido com sucesso']);

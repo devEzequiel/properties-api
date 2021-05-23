@@ -15,12 +15,16 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->string('owner_id');
+            $table->unsignedBigInteger('owner_id');
+
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->string('slug')->unique();
+
             $table->decimal('rental_price');
             $table->decimal('sale_price');
+
+            $table->foreign('owner_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
