@@ -21,12 +21,12 @@ class UserController extends Controller
         $this->user = $user;
     }
 
-    public function login()
-    {
 
-    }
-
-    public function show(int $id)
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         try {
             $user = $this->user->with('profile')->findOrFail($id);
@@ -45,7 +45,7 @@ class UserController extends Controller
      * @param UserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->all();
 
@@ -61,7 +61,11 @@ class UserController extends Controller
                 'phone' => $data['phone']
             ]);
 
-            return response()->json(['data' => ['status' => 'success', 'user' => $user]]);
+            return response()->json([
+                'data' => [
+                    'status' => 'success',
+                    'user' => $user
+                ]], 202);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
@@ -95,6 +99,20 @@ class UserController extends Controller
 
             $user->profile()->update($profile);
             return response()->json(['data' => ['message' => 'Usuário atualizado com sucesso!']], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $user = $this->user->findOrFail($id);
+            $user->profile()->delete();
+
+            $user->delete();
+
+            return response()->json(['msg' => 'Usuário removido com sucesso'], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }

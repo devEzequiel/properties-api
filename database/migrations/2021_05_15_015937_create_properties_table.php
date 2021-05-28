@@ -24,7 +24,7 @@ class CreatePropertiesTable extends Migration
             $table->decimal('rental_price');
             $table->decimal('sale_price');
 
-            $table->foreign('owner_id')->references('id')->on('users');
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
