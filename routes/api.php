@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+//routes to manage the users of the app
 Route::namespace('Api')->name('user.')->prefix('auth')->group(function () {
+
     Route::get('/', [UserController::class, 'index'])
         ->name('list');
     Route::get('/{id}', [UserController::class, 'show'])
@@ -26,15 +27,25 @@ Route::namespace('Api')->name('user.')->prefix('auth')->group(function () {
     Route::post('/', [UserController::class, 'store'])
         ->name('register');
     Route::put('/{id}', [UserController::class, 'update'])
-        ->name('update');
+        ->name('update')->middleware('auth:sanctum');
     Route::delete('/{id}', [UserController::class, 'destroy'])
         ->name('delete');
 
+    //manage access route
     Route::post('/login', [LoginController::class, 'login'])
         ->name('login');
+    Route::post('/logout', [LoginController::class, 'logout'])
+        ->name('logout')->middleware('auth:sanctum');
+
+    Route::post('/logout/{id}', [LoginController::class, 'removeAllTokensFromCurrentUser'])
+        ->name('remove_all_tokens')->middleware('auth:sanctum');
+
 });
 
+
+//routes to acess the proprerties etc (routes protected by sanctum middleware)
 Route::namespace('Api')->middleware('auth:sanctum')->name('property.')->prefix('properties')->group(function () {
+
     Route::get('/', [PropertyController::class, 'index'])
         ->name('list');
     Route::get('/{id}', [PropertyController::class, 'show'])
@@ -45,4 +56,5 @@ Route::namespace('Api')->middleware('auth:sanctum')->name('property.')->prefix('
         ->name('update');
     Route::delete('/{id}', [PropertyController::class, 'destroy'])
         ->name('delete');
+        
 });

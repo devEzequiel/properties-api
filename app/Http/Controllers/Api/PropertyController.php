@@ -104,6 +104,8 @@ class PropertyController extends Controller
 
     protected function slugUpdate(Array $property)
     {
+        
+
         $slug = Str::slug($property['title']);
 
         return $slug;

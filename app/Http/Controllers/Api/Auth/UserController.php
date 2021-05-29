@@ -81,6 +81,11 @@ class UserController extends Controller
         $data = $request->all();
 
         if ($request->has('password') && $request->get('password')) {
+            //validate password
+            Validator::make($data, [
+                'password' => 'required|confirmed'
+            ])->validate();
+
             $data['password'] = bcrypt($data['password']);
         } else {
             unset($data['password']);
