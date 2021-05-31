@@ -17,6 +17,8 @@ class CreateSavedProperties extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('property_id');
+
+            $table->text('details')->nullable(true);
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');

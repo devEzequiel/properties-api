@@ -10,6 +10,12 @@ class SavedProperty extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'property_id',
+        'details'
+    ];
+
     /**
      * @return [type]
      */

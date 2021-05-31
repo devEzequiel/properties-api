@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\UserController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\SavedPropertyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +44,7 @@ Route::namespace('Api')->name('user.')->prefix('auth')->group(function () {
 
 
 //routes to acess the proprerties etc (routes protected by sanctum middleware)
-Route::namespace('Api')->name('property.')->prefix('properties')->group(function () {
+Route::namespace('Api')->name('property.')->prefix('property')->group(function () {
 
     Route::get('/', [PropertyController::class, 'index'])
         ->name('list');
@@ -55,6 +56,7 @@ Route::namespace('Api')->name('property.')->prefix('properties')->group(function
         ->name('update')->middleware('auth:sanctum');
     Route::delete('/{id}', [PropertyController::class, 'destroy'])
         ->name('delete')->middleware('auth:sanctum');
-    Route::post('save/{$id}', [PropertyController::class, 'addPropertiesOnList'])
-        ->name('save_property');
+
+    Route::post('{id}/save', [SavedPropertyController::class, 'store'])
+        ->name('save')->middleware('auth:sanctum');
 });
