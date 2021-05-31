@@ -23,4 +23,9 @@ class Property extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function savedProperties()
+    {
+        return $this->hasMany(SavedProperty::class);
+    }
 }

@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\Auth\UserController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\Auth\LoginController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,24 +36,25 @@ Route::namespace('Api')->name('user.')->prefix('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])
         ->name('logout')->middleware('auth:sanctum');
 
-    Route::post('/logout/{id}', [LoginController::class, 'removeAllTokensFromCurrentUser'])
+    Route::delete('/logout/{id}', [LoginController::class, 'removeAllTokensFromCurrentUser'])
         ->name('remove_all_tokens')->middleware('auth:sanctum');
 
 });
 
 
 //routes to acess the proprerties etc (routes protected by sanctum middleware)
-Route::namespace('Api')->middleware('auth:sanctum')->name('property.')->prefix('properties')->group(function () {
+Route::namespace('Api')->name('property.')->prefix('properties')->group(function () {
 
     Route::get('/', [PropertyController::class, 'index'])
         ->name('list');
     Route::get('/{id}', [PropertyController::class, 'show'])
         ->name('show');
     Route::post('/', [PropertyController::class, 'store'])
-        ->name('create');
+        ->name('create')->middleware('auth:sanctum');
     Route::put('/{id}', [PropertyController::class, 'update'])
-        ->name('update');
+        ->name('update')->middleware('auth:sanctum');
     Route::delete('/{id}', [PropertyController::class, 'destroy'])
-        ->name('delete');
-        
+        ->name('delete')->middleware('auth:sanctum');
+    Route::post('save/{$id}', [PropertyController::class, 'addPropertiesOnList'])
+        ->name('save_property');
 });

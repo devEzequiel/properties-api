@@ -3,6 +3,7 @@
 namespace App\Models\Api\Auth;
 
 use App\Models\Api\Property;
+use App\Models\Api\SavedProperty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
@@ -38,6 +39,11 @@ class User extends Model
     public function property()
     {
         return $this->hasMany(Property::class);
+    }
+
+    public function savedProperties()
+    {
+        return $this->hasMany(SavedProperty::class);
     }
 
     public function profile()

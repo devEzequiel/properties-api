@@ -88,6 +88,12 @@ class PropertyController extends Controller
         return response()->json(['data' => ['message' => 'Imóvel atualizado com sucesso']]);
     }
 
+    public function addPropertiesOnList(int $id)
+    {
+        $this->property->id = $id;
+        
+    }
+
     /**
      * Remove the specified resource from storage.
      *
