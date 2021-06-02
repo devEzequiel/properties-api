@@ -55,7 +55,9 @@ class SavedPropertyController extends Controller
 
             return response()->json(['status' => 'success'], 201);
         } catch (\Exception $e) {
+ 
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
+
         }
 
     }
@@ -66,11 +68,19 @@ class SavedPropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         try {
-            $this->savedProperty = $this->savedProperty->with('property')->findOrFail($id);
-            dd($this->savedProperty);
+            $savedProperties = DB::table('saved_properties')
+                                        ->where('user_id', Auth::user()->id);
+            foreach ($savedProperties as $s){
+                var_dump($s);
+                break;
+            }
+        // dd($this->savedProperty);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
     }
 
@@ -81,8 +91,28 @@ class SavedPropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        //
+
+        $savedProperty = DB::table('saved_properties')
+                                ->where('user_id', '=', Auth::user()->id)
+                                ->where('property_id', '=', $id)
+                                ->first();
+        
+        // dd($property);
+        if (!$savedProperty) {
+            return response()->json(['msg' => 'Nenhuma propriedade encontrada']);
+        }
+
+        try {
+            $this->savedProperty = DB::table('saved_properties')
+                                        ->where('property_id', $id)
+                                        ->where('user_id', Auth::user()->id)
+                                        ->delete();
+
+            return response()->json(['msg' => 'Propriedade removida da sua lista'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
+        }
     }
 }

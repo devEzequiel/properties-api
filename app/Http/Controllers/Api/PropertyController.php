@@ -48,6 +48,7 @@ class PropertyController extends Controller
      */
     public function show(int $id): PropertyResource
     {
+        
         $property = $this->property->findOrFail($id);
 
         return new PropertyResource($property);

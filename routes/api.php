@@ -62,14 +62,14 @@ Route::namespace('Api')->middleware('auth:sanctum')->name('property.')->prefix('
 
 
 //manage and saving properties on the list
-Route::namespace('Api')->middleware('auth:sanctum')->name('saved.')->prefix('property')->group(function () {
+Route::namespace('Api')->middleware('auth:sanctum')->name('saved.')->prefix('saved')->group(function () {
 
-    Route::post('{id}/save', [SavedPropertyController::class, 'store'])
+    Route::post('{id}', [SavedPropertyController::class, 'store'])
         ->name('save');
 
-    Route::get('saved', [SavedPropertyController::class, 'show'])
+    Route::get('', [SavedPropertyController::class, 'show'])
         ->name('show');
 
-    Route::delete('{id}/delete', [SavedPropertyController::class, 'store'])
+    Route::delete('{id}', [SavedPropertyController::class, 'destroy'])
         ->name('remove');
 });
